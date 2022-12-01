@@ -2,10 +2,7 @@ import mongoose from "mongoose";
 
 const quizSchema = new mongoose.Schema({
 
-    score: {
-        type: Number,
-        required: true,
-    },
+
     question: { type: mongoose.Schema.Types.ObjectId, ref: "Question" }
 
 }, { timestamps: true });

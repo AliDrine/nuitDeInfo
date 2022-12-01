@@ -1,76 +1,56 @@
 import { User } from "./users.model.js";
 
-export const me = (req, res) => {
-  res.status(200).json({ data: req.user });
-};
+export const createUser = async(req, res) => {
+    const newUser = new User({
+        name: req.body.name,
+        lastName: req.body.lastName,
+        age: req.body.age,
+        genre: req.body.genre
 
-export const getAll = async (req, res) => {
-  const isAdmin = req.user.role.includes("admin");
-  if (isAdmin) {
-    const users = await User.find({archived:false});
-    res.status(200).json({ status: 1, data: users });
-  } else {
-    res.status(401).json({ status: 0, message: "not Authorized !" });
-  }
-};
-export const getById = async (req, res) => {
-  const isAdmin = req.user.role.includes("admin");
-  if (isAdmin) {
-    const userId = req.params.id;
-    const user = await User.findById(userId);
-    res.status(200).json({ status: 1, data: user });
-  } else {
-    res.status(401).json({ status: 0, message: "not Authorized !" });
-  }
-};
-
-export const updateMe = async (req, res) => {
-  try {
-    const user = await User.findByIdAndUpdate(req.user._id, req.body)
-      .lean()
-      .exec();
-
-    res.status(200).json({ status: 1, data: user });
-  } catch (e) {
-    console.error(e);
-    res.status(400).end();
-  }
-};
-
-export const updateById = async (req, res) => {
-  const isAdmin = req.user.role.includes("admin");
-  if (isAdmin) {
+    });
     try {
-      const user = await User.findByIdAndUpdate(req.params.id, req.body)
-        .lean()
-        .exec();
-
-      res.status(200).json({ status: 1, data: user });
-    } catch (e) {
-      console.error(e);
-      res.status(400).end();
+        const savedUser = await newUser.save();
+        return res.status(200).json(savedUser);
+    } catch (err) {
+        return res.status(500).json(err);
     }
-  } else {
-    res.status(401).json({ status: 0, message: "not Authorized !" });
-  }
 };
 
-export const deleteById = async (req, res) => {
-  const isAdmin = req.user.role.includes("admin");
-   console.log('admin',isAdmin)
-  if (isAdmin) {
+export const getUsers = async(req, res) => {
     try {
-      const user = await User.findByIdAndUpdate(req.params.id, {
-        archived: true,
-      })
-        .lean()
-        .exec();
-      res.status(200).json({ status: 1, data: user });
-    } catch (e) {
-      console.log(e);
-      res.status(400).end();
+        const users = await User.find();
+        return res.status(200).json(users);
+    } catch (err) {
+        return res.status(500).json(err);
     }
-  } else {
-    res.status(401).json({ status: 0, message: "not Authorized !" });
-  }
+};
+export const getUser = async(req, res) => {
+    const id = req.params.user;
+
+    try {
+        const user = await User.findById(id);
+        return res.status(200).json(user);
+    } catch (err) {
+        return res.status(500).json(err);
+    }
+};
+export const deleteUser = async(req, res) => {
+    const id = req.params.user;
+    try {
+        const user = await User.findByIdAndDelete(id);
+        return res.status(200).json(user);
+    } catch (err) {
+        return res.status(500).json(err);
+    }
+};
+export const updateUser = async(req, res) => {
+    const id = req.params.user;
+    try {
+        const user = await User.findByIdAndUpdate(id, req.body, {
+            new: true,
+        });
+        return res.status(200).json(user);
+    } catch (err) {
+        return res.status(500).json(err);
+    }
 };
