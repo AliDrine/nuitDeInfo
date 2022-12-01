@@ -46,9 +46,9 @@ export const updateOne = (model) => async (req, res) => {
 
 // CREATE ONE
 export const createOne = (model) => async (req, res) => {
-  const createdBy = req.user._id;
+  //const createdBy = req.user._id;
   try {
-    const results = await model.create({ ...req.body, createdBy });
+    const results = await model.create({ ...req.body });
     res.status(200).json({ status: 1, message : `Record with name ${results.name} created successfully`});
   } catch (error) {
     console.log(error);

@@ -1,18 +1,30 @@
 import mongoose from "mongoose";
 
-const exampleSchema = new mongoose.Schema(
+const qestionSchema = new mongoose.Schema(
   {
-    name: {
+    descrption: {
       type: String,
-      required: true,
-      unique: true,
+      required: true
     },
-    status: {
-      type: String,
+    choices: {
+      type: Array,
+      required: true,
+      title:{
+        type: String,
+        required: true
+      },
+      value:{
+        type:Number,
+        required: true
+      }
+
+    },
+    answer: {
+      type: Number,
       required: true,
     }
   },
   { timestamps: true }
 );
 
-export const Example = mongoose.model("Example", exampleSchema);
+export const Question = mongoose.model("qyestionModel", qestionSchema);
