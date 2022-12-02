@@ -12,13 +12,15 @@ const questionSchema = new mongoose.Schema({
             required: true
         },
         value: {
-            type: Number,
-
+            type: Boolean,
         }
     },
     answer: {
-        type: Number,
+        type: Boolean,
         required: true,
+        descrption: {
+            type: String,
+        },
     }
 }, { timestamps: true });
 export const question = mongoose.model("Question", questionSchema);
